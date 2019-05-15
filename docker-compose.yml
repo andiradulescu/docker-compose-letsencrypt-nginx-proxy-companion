@@ -22,7 +22,8 @@ services:
         max-file: ${NGINX_WEB_LOG_MAX_FILE:-10}
 
   nginx-gen:
-    image: jwilder/docker-gen
+    # image: jwilder/docker-gen
+    build: ./
     command: -notify-sighup ${NGINX_WEB:-nginx-web} -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     container_name: ${DOCKER_GEN:-nginx-gen}
     restart: always
@@ -33,7 +34,7 @@ services:
       - ${NGINX_FILES_PATH:-./data}/certs:/etc/nginx/certs:ro
       - ${NGINX_FILES_PATH:-./data}/htpasswd:/etc/nginx/htpasswd:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
+      # - ./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
     logging:
       driver: ${NGINX_GEN_LOG_DRIVER:-json-file}
       options:
